@@ -59,10 +59,13 @@ if (active == null)
     return;
 }
 
-var manager = new CommandManager(active);
+CommandManager.Player = active;
 
-manager.Add(new Test()); // Test command
-manager.Add(new Stats()); // Stats command
+
+
+CommandManager.Add(new Test()); // Test command
+CommandManager.Add(new Stats()); // Stats command
+CommandManager.Add(new Help()); // Help command
 
 
 while (true)
@@ -82,7 +85,7 @@ while (true)
     
     try
     {
-        manager.ProcessInput(input);
+        CommandManager.ProcessInput(input);
     }
     catch (Exception ex)
     {

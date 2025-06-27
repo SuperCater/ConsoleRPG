@@ -3,25 +3,29 @@ using ConsoleRPG.Classes;
 
 namespace ConsoleRPG.Managers;
 
-public class CommandManager(Player player)
+public static class CommandManager
 {
-    private Player Player { get; init; } = player;
-    private List<Command> Stored { get; } = [];
+    public static Player? Player { get; set; }
+    public static List<Command> Stored { get; } = [];
 
-    public Command? Get(string commandName)
+    public static Command? Get(string commandName)
     {
 
         return Stored.First(command => command.Name == commandName);
     }
 
-    public void Add(Command command)
+    public static void Add(Command command)
     {
         Stored.Add(command);
     }
 
 
-    public void ProcessInput(string input)
+    public static void ProcessInput(string input)
     {
+        if (Player == null)
+        {
+            throw new InvalidOperationException("Player is not set");
+        }
         var arguments = input.Split(' ').ToList();
         var commandName = arguments[0];
         arguments.RemoveAt(0);
