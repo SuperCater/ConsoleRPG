@@ -24,4 +24,23 @@ public static class PromptService
             return player;
         }
     }
+    
+    public static bool PromptYesOrNo(string message)
+    {
+        while (true)
+        {
+            Console.Write($"{message} (y/n): ");
+            var input = Console.ReadLine()?.Trim().ToLower();
+            switch (input)
+            {
+                case "y" or "yes":
+                    return true;
+                case "n" or "no":
+                    return false;
+                default:
+                    Console.WriteLine("Invalid input. Please enter 'y' or 'n'.");
+                    break;
+            }
+        }
+    }
 }
