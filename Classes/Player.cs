@@ -1,5 +1,5 @@
 using ConsoleRPG.Records;
-
+using Newtonsoft.Json;
 namespace ConsoleRPG.Classes;
 
 public class Player
@@ -13,6 +13,8 @@ public class Player
     public int Experience { get; set; } = 0;
 
     private static Player? ActivePlayer { get; set; }
+    
+    public Skill StaminaSkill { get; set; } = new Skill("Stamina", "Increases stamina regeneration and max stamina rate.");
     
     
     public Player(PlayerData data)
@@ -34,14 +36,17 @@ public class Player
         }
         var filePath = Path.Join(folder, $"{Name}.json");
         // Write the player data to the file
-        var playerData = new PlayerData
-        {
-            Name = Name, Level = Level, Health = Health
-        };
-        
-        var json = System.Text.Json.JsonSerializer.Serialize(playerData);
+
+
+        var json = JsonConvert.SerializeObject(this, Formatting.Indented);
         
         File.WriteAllText(filePath, json);
+    }
+
+    public int AddXp(int amount)
+    {
+        Experience += amount;
+        return CanLevelUp() ? LevelUp() : Level;
     }
 
     public bool CanLevelUp()
@@ -49,7 +54,7 @@ public class Player
         return this.Experience >= 1000; // Levels only take 1000 experience to level up
     }
 
-    public int LevelUp()
+    private int LevelUp()
     {
         while (CanLevelUp())
         {
