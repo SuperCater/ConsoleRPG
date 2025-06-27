@@ -14,6 +14,7 @@ public abstract class Command(CommandOptions opts)
     {
         var ret = Action(input);
         Ran.Fire(input);
+        return ret;
     }
 
     public Func<CommandInput, string> Action { get; init; } = opts.Action;
