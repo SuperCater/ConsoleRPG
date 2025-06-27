@@ -1,4 +1,5 @@
 using ConsoleRPG.Classes;
+using ConsoleRPG.Classes.Entities;
 using ConsoleRPG.Records;
 
 namespace ConsoleRPG.Services;

@@ -1,5 +1,7 @@
 using System.ComponentModel;
 using ConsoleRPG.Classes;
+using ConsoleRPG.Classes.Entities;
+using ConsoleRPG.Classes.Internal;
 
 namespace ConsoleRPG.Managers;
 
@@ -7,6 +9,8 @@ public static class CommandManager
 {
     public static Player? Player { get; set; }
     public static List<Command> Stored { get; } = [];
+    
+    public static Signal<Command> CommandRan { get; } = new();
 
     public static Command? Get(string commandName)
     {

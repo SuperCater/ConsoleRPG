@@ -1,4 +1,5 @@
 ﻿using ConsoleRPG.Classes;
+using ConsoleRPG.Classes.Entities;
 using ConsoleRPG.Commands;
 using ConsoleRPG.Managers;
 using ConsoleRPG.Records;

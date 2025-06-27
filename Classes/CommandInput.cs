@@ -1,3 +1,5 @@
+using ConsoleRPG.Classes.Entities;
+
 namespace ConsoleRPG.Classes;
 
 public class CommandInput
