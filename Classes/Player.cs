@@ -2,28 +2,34 @@ using ConsoleRPG.Records;
 using Newtonsoft.Json;
 namespace ConsoleRPG.Classes;
 
-public class Player
+public class Player : Lifeform
 {
-    public string Name { get; set; }
 
     public int Stamina { get; set; }
-    public int Health { get; set; } = 0;
     public int Level { get; private set; } = 0;
     
     public int Experience { get; set; } = 0;
 
     private static Player? ActivePlayer { get; set; }
     
-    public Skill StaminaSkill { get; set; } = new Skill("Stamina", "Increases stamina regeneration and max stamina rate.");
+    public List<Skill> Skills { get; set; }
     
     
-    public Player(PlayerData data)
+    public Player(PlayerData data): base(data.Name, data.Health)
     {
         Name = data.Name;
         Level = data.Level;
         Health = data.Health;
         Stamina = data.Stamina;
         Experience = data.Experience;
+        
+        // Initialize default skills
+        Skills =
+        [
+            new Skill("Stamina", "Increased stamina level will increase your maximum stamina and stamina regeneration."),
+            new Skill("Health", "Increased health level will increase your maximum health and health regeneration."),
+            new Skill("Strength", "Increased strength will allow for you to do many tasks faster and output more damage."),
+        ];
     }
     
 
@@ -38,7 +44,7 @@ public class Player
         // Write the player data to the file
 
 
-        var json = JsonConvert.SerializeObject(this, Formatting.Indented);
+        var json = ToJson();
         
         File.WriteAllText(filePath, json);
     }
@@ -51,7 +57,7 @@ public class Player
 
     public bool CanLevelUp()
     {
-        return this.Experience >= 1000; // Levels only take 1000 experience to level up
+        return Experience >= 1000; // Levels only take 1000 experience to level up
     }
 
     private int LevelUp()
@@ -80,6 +86,11 @@ public class Player
     {
         Stamina += amount;
         return Stamina;
+    }
+
+    public string ToJson()
+    {
+        return JsonConvert.SerializeObject(this, Formatting.Indented);
     }
     
     
