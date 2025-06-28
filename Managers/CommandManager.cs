@@ -10,17 +10,24 @@ public static class CommandManager
     public static Player? Player { get; set; }
     public static List<Command> Stored { get; } = [];
     
-    public static Signal<Command> CommandRan { get; } = new();
+    public static Signal<CommandInput> CommandRan { get; } = new();
 
     public static Command? Get(string commandName)
     {
 
         return Stored.First(command => command.Name == commandName);
     }
+    
+    private static Task HandleCommandRan(CommandInput input)
+    {
+        CommandRan.Fire(input);
+        return Task.CompletedTask;
+    }
 
     public static void Add(Command command)
     {
         Stored.Add(command);
+        command.Ran.Connect(HandleCommandRan);
     }
 
 
@@ -34,7 +41,7 @@ public static class CommandManager
         var commandName = arguments[0];
         arguments.RemoveAt(0);
 
-        var commandInput = new CommandInput(Player, arguments);
+        
         var command = Get(commandName);
 
         if (command == null)
@@ -42,6 +49,8 @@ public static class CommandManager
             Console.WriteLine($"Command '{commandName}' not found.");
             return;
         }
+        
+        var commandInput = new CommandInput(Player, arguments, command);
 
         try
         {

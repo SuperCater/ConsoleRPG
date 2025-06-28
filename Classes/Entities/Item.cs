@@ -9,7 +9,7 @@ public class Item
     private string Name { get; set; }
     public float Durability { get; set; }
 
-    public Signal<object> OnBreak = new();
+    public Signal<Item> OnBreak = new();
     
     public Item(string name, float durability)
     {

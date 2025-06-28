@@ -29,14 +29,15 @@ public class Lifeform
         Health = 0;
     }
 
-    private void HandleBreak(Item? sender, EventArgs ignore)
+    private Task HandleBreak(Item sender)
     {
         Inventory.Remove(sender);
+        return Task.CompletedTask;
     }
 
     public void AddItem(Item item)
     {
         Inventory.Add(item);
-        item.OnBreak += HandleBreak;
+        item.OnBreak.Connect(HandleBreak);
     }
 }
