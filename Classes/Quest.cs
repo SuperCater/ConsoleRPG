@@ -1,4 +1,5 @@
 using ConsoleRPG.Classes.Entities;
+using ConsoleRPG.Classes.Internal;
 
 namespace ConsoleRPG.Classes;
 
@@ -7,6 +8,10 @@ public class Quest
     public Player Player { get; }
     public string Name { get; }
     public string Description { get; }
+
+    public bool IsCompleted = false;
+    
+    public Signal<Quest> Completed = new(); // Signal that fires when the quest is completed
     
     public List<Quest> Subquests { get; } // Subquests of this quest;
 
@@ -19,7 +24,12 @@ public class Quest
     {
         if (subquests is { Count: > 0 })
         {
-            
+            AmountNeeded = subquests.Count;
+            // Need to connect into the subquests
+            foreach (var subquest in subquests)
+            {
+                subquest.Completed.Connect(HandleSubquestCompleted); // Hook into the subquest's completion
+            }
         }
         
         Player = owner;
@@ -29,6 +39,12 @@ public class Quest
         AmountCompleted = 0;
         Subquests = subquests ?? []; 
         Rewards = rewards ?? [];
+    }
+    
+    private Task HandleSubquestCompleted(Quest subquest)
+    {
+        AddProgress();
+        return Task.CompletedTask;
     }
     
     public int AddProgress(int amount = 1)
@@ -43,9 +59,15 @@ public class Quest
         }
     }
 
-    public List<Item> Complete()
+    public void Complete()
     {
-        if 
+        if (IsCompleted)
+        {
+            throw new InvalidOperationException("Quest is already completed.");
+        }
+        IsCompleted = true;
+        Completed.Fire(this);
+        
     }
 
 }
