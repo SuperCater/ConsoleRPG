@@ -6,7 +6,7 @@ namespace ConsoleRPG.Classes;
 
 public class Item
 {
-    private string Name { get; set; }
+    public string Name { get; set; }
     public float Durability { get; set; }
 
     public Signal<Item> OnBreak = new();
