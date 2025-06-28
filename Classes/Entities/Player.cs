@@ -119,5 +119,26 @@ public class Player : Lifeform
         return ActivePlayer;
     }
     
+    public static Player LoadPlayer(string name)
+    {
+        var folder = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ConsoleRPG");
+        var filePath = Path.Join(folder, $"{name}.json");
+        
+        if (!File.Exists(filePath))
+        {
+            throw new FileNotFoundException($"Player data for {name} not found.");
+        }
+        
+        var json = File.ReadAllText(filePath);
+        var player = JsonConvert.DeserializeObject<Player>(json);
+
+        if (player is null)
+        {
+            throw new NullReferenceException($"Player data for {name} not found/corrupted.");
+        }
+        
+        return player;
+    }
+    
     
 }

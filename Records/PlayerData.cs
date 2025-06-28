@@ -1,5 +1,6 @@
 namespace ConsoleRPG.Records;
 
+// TODO: Remove this and just have it destructure from json.
 public record PlayerData
 {
     public required string Name { get; init; }
