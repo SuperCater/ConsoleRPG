@@ -16,41 +16,9 @@ if (players.Count == 0)
 }
 else
 {
-    Console.WriteLine("Available players:");
-    for (var i = 0; i < players.Count; i++)
-    {
-        Console.WriteLine($"{i + 1}. {Path.GetFileNameWithoutExtension(players[i])}");
-    }
+    var player = PromptService.PromptLoadPlayer();
     
-    Console.WriteLine("0. Create a new player");
-    
-    Console.WriteLine("Select a player by number:");
-    if (!int.TryParse(Console.ReadLine(), out var choice) || choice < 0 || choice > players.Count)
-    {
-        Console.WriteLine("Invalid choice. Exiting...");
-        return;
-    }
-
-    if (choice == 0)
-    {
-        var player = PromptService.PromptCreatePlayer();
-        Player.SetActivePlayer(player);
-        return;
-    }
-    
-    var selectedPlayer = players[choice - 1];
-    
-    var playerDataJson = File.ReadAllText(selectedPlayer);
-    var playerData = JsonConvert.DeserializeObject<PlayerData>(playerDataJson);
-    
-    if (playerData == null)
-    {
-        Console.WriteLine("Failed to load player data. Exiting...");
-        return;
-    }
-    
-
-    Player.SetActivePlayer(new Player(playerData));
+    Player.SetActivePlayer(player);
 }
 
 var active = Player.GetActivePlayer();

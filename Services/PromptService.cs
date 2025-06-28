@@ -26,6 +26,35 @@ public static class PromptService
         }
     }
     
+    public static Player PromptLoadPlayer()
+    {
+        var players = Player.GetPlayerNames();
+        if (players.Count == 0)
+        {
+            Console.WriteLine("No players found. Please create a new player.");
+            return PromptCreatePlayer();
+        }
+        Console.WriteLine("Available players:");
+        for (var i = 0; i < players.Count; i++)
+        {
+            if (i >= 0 && i < players.Count)
+                Console.WriteLine($"{i + 1}. {Path.GetFileNameWithoutExtension(players[i])}");
+        }
+        Console.WriteLine("0. Create a new player");
+        Console.Write("Select a player by number: ");
+        if (!int.TryParse(Console.ReadLine(), out var choice) || choice < 0 || choice > players.Count)
+        {
+            Console.WriteLine("Invalid choice. Exiting...");
+            return PromptCreatePlayer();
+        }
+        if (choice == 0)
+        {
+            return PromptCreatePlayer();
+        }
+        var selectedPlayer = players[choice - 1];
+        return Player.LoadPlayer(selectedPlayer);
+    }
+    
     public static bool PromptYesOrNo(string message)
     {
         while (true)
