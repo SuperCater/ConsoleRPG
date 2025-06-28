@@ -5,12 +5,12 @@ public class Lifeform
     public float Health { get; set; }
     public string Name { get; set; }
     
-    public List<Item> Inventory { get; private set; }
-    protected Lifeform(string name, float health)
+    private List<Item> Inventory { get; private set; }
+    protected Lifeform(string name, float health, List<Item>? inventory)
     {
         Name = name;
         Health = health;
-        Inventory = [];
+        Inventory = inventory ?? [];
     }
 
 
@@ -39,5 +39,19 @@ public class Lifeform
     {
         Inventory.Add(item);
         item.OnBreak.Connect(HandleBreak);
+    }
+
+    public Item? GetBestWeapon()
+    {
+        return Inventory
+            .Where(item => item is Weapon)
+            .Cast<Weapon>()
+            .OrderByDescending(weapon => weapon.Damage)
+            .FirstOrDefault();
+    }
+    
+    public Lifeform Clone()
+    {
+        return new Lifeform(Name, Health, [..Inventory]);
     }
 }
