@@ -9,6 +9,6 @@ public class Explore() : Command(new CommandOptions
     Description = "Explore the world around you",
     Action = (input) =>
     {
-       return "WIP["
+        return "WIP[";
     }
 });

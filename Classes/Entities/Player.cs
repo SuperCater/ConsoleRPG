@@ -1,4 +1,5 @@
 using ConsoleRPG.Records;
+using ConsoleRPG.Services;
 using Newtonsoft.Json;
 namespace ConsoleRPG.Classes.Entities;
 
@@ -15,7 +16,7 @@ public class Player : Lifeform
     public List<Skill> Skills { get; set; }
     
     
-    public Player(PlayerData data): base(data.Name, data.Health)
+    public Player(PlayerData data): base(data.Name, data.Health, [])
     {
         Name = data.Name;
         Level = data.Level;
@@ -130,14 +131,67 @@ public class Player : Lifeform
         }
         
         var json = File.ReadAllText(filePath);
-        var player = JsonConvert.DeserializeObject<Player>(json);
+        Console.WriteLine(json);
+        var player = JsonConvert.DeserializeObject(json);
+        Console.WriteLine(player);
 
         if (player is null)
         {
             throw new NullReferenceException($"Player data for {name} not found/corrupted.");
         }
+
+        return new Player(new PlayerData {Name = "Unknown"});
+    }
+    
+    public static List<Player> GetAllPlayers()
+    {
+        var players = new List<Player>();
+        var playerNames = GetPlayerNames();
         
-        return player;
+        foreach (var playerName in playerNames)
+        {
+            Console.WriteLine(playerName);
+            try
+            {
+                var player = LoadPlayer(Path.GetFileNameWithoutExtension(playerName));
+                players.Add(player);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading player {playerName}: {ex.Message}");
+            }
+        }
+        
+        return players;
+    }
+
+    public static void DeleteAllPlayers()
+    { 
+        var delete = PromptService.PromptYesOrNo("Are you sure you want to delete all players? This action cannot be undone.");
+        if (!delete)
+        {
+            Console.WriteLine("Deletion cancelled.");
+            return;
+        }
+        var folder = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ConsoleRPG");
+        if (!Directory.Exists(folder))
+        {
+            Console.WriteLine("No players found to delete.");
+            return;
+        }
+        var files = Directory.GetFiles(folder, "*.json");
+        foreach (var file in files)
+        {
+            try
+            {
+                File.Delete(file);
+                Console.WriteLine($"Deleted player data: {file}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting player data {file}: {ex.Message}");
+            }
+        }
     }
     
     

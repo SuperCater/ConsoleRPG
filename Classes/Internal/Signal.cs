@@ -17,13 +17,18 @@ public class Signal<TParam>
         return con;
     }
 
-    public Connection<TParam> Once(Func<TParam> func)
+    public Connection<TParam> Once(Func<TParam, Task> func)
     {
-        Connection<TParam> con;
+        Connection<TParam>? con = null;
+        var con1 = con;
         con = new Connection<TParam>(this, param =>
         {
             func(param);
-            RemoveConnection(con);
+            if (con1 is null)
+            {
+                throw new InvalidOperationException("Connection is null, this should not happen.");
+            }
+            RemoveConnection(con1);
             return Task.CompletedTask;
         });
         return con;

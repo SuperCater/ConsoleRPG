@@ -5,7 +5,7 @@ public class Lifeform
     public float Health { get; set; }
     public string Name { get; set; }
     
-    private List<Item> Inventory { get; private set; }
+    private List<Item> Inventory { get; set; }
     protected Lifeform(string name, float health, List<Item>? inventory)
     {
         Name = name;

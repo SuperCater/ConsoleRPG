@@ -16,7 +16,7 @@ public class Quest
     public List<Quest> Subquests { get; } // Subquests of this quest;
 
     public readonly int? AmountNeeded;
-    public int? AmountCompleted { get; private set; }
+    public int AmountCompleted { get; private set; }
     
     public readonly List<Item> Rewards; // Rewards for completing this quest
     
@@ -54,9 +54,15 @@ public class Quest
             AmountCompleted += amount;
             if (AmountCompleted > AmountNeeded)
             {
-                AmountCompleted = AmountNeeded;
+                AmountCompleted = AmountNeeded ?? 0; // Ensure we don't exceed the needed amount
             }
+
+            
         }
+
+        return AmountCompleted;
+
+
     }
 
     public void Complete()

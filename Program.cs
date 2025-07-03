@@ -16,9 +16,8 @@ if (players.Count == 0)
 }
 else
 {
-    var player = PromptService.PromptLoadPlayer();
-    
-    Player.SetActivePlayer(player);
+    UiService.RenderPlayerChoice();
+
 }
 
 var active = Player.GetActivePlayer();
@@ -35,6 +34,7 @@ CommandManager.Player = active;
 CommandManager.Add(new Test()); // Test command
 CommandManager.Add(new Stats()); // Stats command
 CommandManager.Add(new Help()); // Help command
+CommandManager.Add(new DeleteAll());
 
 
 while (true)
