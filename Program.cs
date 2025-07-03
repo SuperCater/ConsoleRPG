@@ -35,7 +35,9 @@ CommandManager.Add(new Test()); // Test command
 CommandManager.Add(new Stats()); // Stats command
 CommandManager.Add(new Help()); // Help command
 CommandManager.Add(new DeleteAll());
-
+CommandManager.Add(new Clear());
+CommandManager.Add(new Explore());
+    
 
 while (true)
 {

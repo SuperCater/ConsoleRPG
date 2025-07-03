@@ -1,4 +1,5 @@
 using ConsoleRPG.Classes;
+using ConsoleRPG.Managers;
 using ConsoleRPG.Records;
 
 namespace ConsoleRPG.Commands;
@@ -9,6 +10,7 @@ public class Explore() : Command(new CommandOptions
     Description = "Explore the world around you",
     Action = (input) =>
     {
-        return "WIP[";
+        var enemy = EnemyManager.GetRandomEnemy();
+        return $"You encountered a {enemy.Name}! Prepare for battle!";
     }
 });
